@@ -3,21 +3,13 @@ package in.quallit.helper.date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 import in.quallit.helper.GenericHelper;
 
 public class DateHelper {
 
-	private static DateHelper dateHelper;
-
 	private DateHelper() {
-	}
-
-	public static DateHelper getInstance() {
-		if (GenericHelper.isNull(dateHelper)) {
-			dateHelper = new DateHelper();
-		}
-		return dateHelper;
 	}
 
 	public static Date convertToDate(String strDate, DateFormat dateFormat)
@@ -39,6 +31,50 @@ public class DateHelper {
 	public static String format(String strDate, DateFormat dateFormat)
 			throws ParseException {
 		return convertToString(convertToDate(strDate, dateFormat), dateFormat);
+	}
+
+	public static long differenceInMilliseconds(Date startDate, Date endDate)
+			throws ParseException {
+		Date dateOne = format(
+				GenericHelper.isNull(startDate) ? new Date() : startDate,
+				DateFormat.YYYY_MM_DD_HH_MM_SS);
+		Date dateTwo = format(
+				GenericHelper.isNull(endDate) ? new Date() : endDate,
+				DateFormat.YYYY_MM_DD_HH_MM_SS);
+		long millis = 0;
+		if (GenericHelper.isNotNull(dateOne)
+				&& GenericHelper.isNotNull(dateTwo)) {
+			millis = Math.abs(dateTwo.getTime() - dateOne.getTime());
+		}
+		return millis;
+	}
+
+	public static long differenceInSeconds(Date startDate, Date endDate)
+			throws ParseException {
+		return TimeUnit.SECONDS.convert(
+				differenceInMilliseconds(startDate, endDate),
+				TimeUnit.MILLISECONDS);
+	}
+
+	public static long differenceInMinutes(Date startDate, Date endDate)
+			throws ParseException {
+		return TimeUnit.MINUTES.convert(
+				differenceInMilliseconds(startDate, endDate),
+				TimeUnit.MILLISECONDS);
+	}
+
+	public static long differenceInHours(Date startDate, Date endDate)
+			throws ParseException {
+		return TimeUnit.HOURS.convert(
+				differenceInMilliseconds(startDate, endDate),
+				TimeUnit.MILLISECONDS);
+	}
+
+	public static long differenceInDays(Date startDate, Date endDate)
+			throws ParseException {
+		return TimeUnit.DAYS.convert(
+				differenceInMilliseconds(startDate, endDate),
+				TimeUnit.MILLISECONDS);
 	}
 
 	private static SimpleDateFormat getSimpleDateFormatter(

@@ -4,16 +4,7 @@ import java.util.Collection;
 
 public class GenericHelper {
 
-	private static GenericHelper genericHelper;
-
 	private GenericHelper() {
-	}
-
-	public static GenericHelper getInstance() {
-		if (isNull(genericHelper)) {
-			genericHelper = new GenericHelper();
-		}
-		return genericHelper;
 	}
 
 	public static boolean isNull(Object obj) {
@@ -108,5 +99,12 @@ public class GenericHelper {
 
 	public static boolean isPositiveNumber(Object obj) {
 		return !isNegativeNumber(obj);
+	}
+
+	public static boolean getBooleanValue(Boolean obj) {
+		if (isNull(obj)) {
+			return false;
+		}
+		return obj.booleanValue();
 	}
 }
